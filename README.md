@@ -1,28 +1,119 @@
 # Beam Search Decision Tree — Visualizador Interativo
 
-Aplicativo Flutter que demonstra como uma arvore de decisao se forma dinamicamente durante uma sessao no estilo Akinator, mantendo multiplas hipoteses em paralelo por meio de Beam Search para lidar com respostas incertas do usuario.
+**Autor:** Jefferson Rodrigo Speck  
+**Disciplina:** Desenvolvimento Mobile
 
 ---
 
-## Video de demonstracao
+## Contexto pedagogico — o que e este projeto
 
-<!-- Cole abaixo o link do seu video no YouTube -->
+Este projeto foi criado com dois propositos complementares.
 
-**URL:** `https://www.youtube.com/watch?v=SEU_VIDEO_AQUI`
+O primeiro e servir como **material de apoio didatico**: o aplicativo torna visivel, em tempo real, como uma arvore de decisao se forma a partir das respostas do usuario. A cada rodada o aluno ve quais candidatos foram eliminados, quantas hipoteses paralelas o algoritmo manteve e por qual caminho a logica passou. O objetivo e tornar concreto um algoritmo que, em sala de aula, costuma ser apresentado apenas de forma abstrata.
+
+O segundo e servir como **enunciado vivo de uma atividade avaliativa**. Os alunos do curso recebem como desafio construir seu proprio aplicativo do mesmo tipo, substituindo os dados de exemplo pelos professores reais do curso. Este projeto demonstra o que se espera do produto final e qual nivel de sofisticacao algorítmica e esperado.
+
+---
+
+## A atividade proposta aos alunos
+
+### Descricao
+
+Cada grupo devera desenvolver um aplicativo mobile no estilo Akinator cujo objetivo sera tentar descobrir qual professor do curso o usuario esta pensando. O app fara uma sequencia de perguntas e usara as respostas para conduzir a logica de decisao ate chegar a um palpite.
+
+### Professores cadastrados obrigatoriamente
+
+O aplicativo deve conter como hipoteses os seguintes professores do curso:
+
+*Aqui os professores*.
+
+### Respostas possiveis
+
+O usuario deve poder responder cada pergunta com exatamente cinco opcoes:
+
+- Sim
+- Nao
+- Nao sei
+- Provavelmente sim
+- Provavelmente nao
+
+### Tipos de perguntas permitidas
+
+As perguntas devem ser neutras, observaveis e respeitosas. Exemplos validos:
+
+- usa oculos
+- tem barba
+- tem cabelo curto
+- costuma usar camiseta
+- costuma usar camisa social
+- fala bastante sobre mercado de trabalho
+- usa muitos exemplos praticos
+- passa exercicios em laboratorio
+- utiliza slides com frequencia
+- escreve bastante no quadro
+- costuma trabalhar com projetos
+- gosta de discutir codigo ao vivo
+- cobra bastante organizacao
+- trabalha com programacao
+- trabalha com banco de dados
+- trabalha com redes
+- trabalha com engenharia de software
+- trabalha com matematica ou logica
+
+### Tipos de perguntas proibidas
+
+Nao sao permitidas perguntas ou descricoes que sejam ofensivas, intimas, discriminatorias ou constrangedoras. Isso inclui referencias a aparencia corporal de forma pejorativa, idade de forma depreciativa, peso ou corpo como piada, cor da pele, religiao, orientacao sexual, posicao politica, origem etnica, apelidos ofensivos, comentarios sobre vida pessoal e avaliacoes subjetivas negativas como "e chato?", "e bravo?", "e ruim?" ou "e confuso?".
+
+Uma boa regra pratica: a pergunta poderia ser lida em voz alta para o proprio professor sem causar constrangimento? Se a resposta for nao, a pergunta nao deve ser usada.
+
+### Funcionalidades obrigatorias
+
+O aplicativo deve conter:
+
+**Tela inicial** com nome do aplicativo, explicacao breve e botao para comecar.
+**Tela de pergunta** exibindo uma pergunta por vez com os cinco botoes de resposta.
+**Logica de decisao** em que as respostas influenciam o caminho do jogo. O aplicativo nao pode exibir perguntas fixas sem considerar as respostas anteriores.
+**Tela de resultado** com o palpite final e opcao para o usuario confirmar se o app acertou ou errou.
+**Botao de reinicio** para jogar novamente.
+
+### Quantidade minima
+
+Cada grupo devera cadastrar ao menos 15 perguntas no aplicativo.
+
+### Dinamica de apresentacao
+
+1. O grupo apresenta o aplicativo.
+2. O grupo explica a modelagem e a logica implementada.
+3. Outro grupo escolhe mentalmente um professor do curso.
+4. Esse outro grupo responde as perguntas do aplicativo.
+5. O aplicativo tenta adivinhar o professor.
+6. A turma verifica se o sistema acertou ou errou.
+7. O grupo avaliador comenta a experiencia de uso.
+8. O professor avalia a solucao tecnica e a apresentacao.
 
 ---
 
 ## Fundamentacao teorica
 
+### Video de demonstracao teórica do algoritmo
+
+O Vídeo demonstra a construção do processo de decisão deste código, o vídeo foi criado com ajuda do NotebookLM da Google.
+
+**URL:** `https://youtu.be/lYfN__oBEbk`
+
+---
+
 ### ID3 e arvores de decisao
 
 O algoritmo classico mais proximo deste projeto e o **ID3** (Iterative Dichotomiser 3), proposto por Ross Quinlan em 1986. O ID3 constroi arvores de decisao escolhendo, a cada no, o atributo que maximiza o ganho de informacao — medida derivada do conceito de entropia de Shannon:
 
-```
-Entropia(S) = -sum( $p_i$ * $log2$($p_i$) )
+$$
+H(S) = - \sum_{i=1}^{n} p_i \log_2(p_i)
+$$
 
-GanhoDeInformacao(S, A) = Entropia(S) - sum( |S_v|/|S| * Entropia(S_v) )
-```
+$$
+IG(S, A) = H(S) - \sum_{v \in Valores(A)} \frac{|S_v|}{|S|} H(S_v)
+$$
 
 Neste projeto a logica e semelhante, mas simplificada: em vez de calcular entropia, o sistema escolhe a pergunta que produz a divisao mais equilibrada entre candidatos que tendem ao "sim" e candidatos que tendem ao "nao". A funcao de pontuacao da pergunta e:
 
@@ -261,6 +352,12 @@ flutter run -d ios
 |----------------|---------|------------------------------------------|
 | flutter        | SDK     | Framework base                           |
 | google_fonts   | ^6.1.0  | Tipografia Inter para a interface        |
+
+---
+
+## Nota sobre uso de inteligencia artificial
+
+O layout e a interface visual deste projeto foram desenvolvidos com auxilio de ferramenta de inteligencia artificial generativa. Todo o algoritmo de decisao, a modelagem do problema, a estrutura de Beam Search, a logica de penalidades, a concepcao da atividade e as ideias pedagogicas que fundamentam este material sao de autoria propria de Jefferson Rodrigo Speck. A IA foi utilizada exclusivamente como ferramenta de producao de codigo de interface, de forma similar ao uso de bibliotecas de componentes ou geradores de scaffold.
 
 ---
 
