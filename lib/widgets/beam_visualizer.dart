@@ -43,11 +43,13 @@ class BeamVisualizer extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: isBest
-                  ? AppTheme.accent.withOpacity(0.08)
+                  ? AppTheme.accent.withValues(alpha: 0.08)
                   : AppTheme.surfaceElevated,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: isBest ? AppTheme.accent.withOpacity(0.4) : AppTheme.border,
+                color: isBest
+                    ? AppTheme.accent.withValues(alpha: 0.4)
+                    : AppTheme.border,
                 width: isBest ? 1.5 : 1,
               ),
             ),
@@ -64,7 +66,9 @@ class BeamVisualizer extends StatelessWidget {
                           size: 14, color: AppTheme.textSecondary),
                     const SizedBox(width: 6),
                     Text(
-                      isBest ? 'Hipótese principal' : 'Hipótese alternativa ${i + 1}',
+                      isBest
+                          ? 'Hipótese principal'
+                          : 'Hipótese alternativa ${i + 1}',
                       style: TextStyle(
                         color:
                             isBest ? AppTheme.accent : AppTheme.textSecondary,
@@ -97,8 +101,7 @@ class BeamVisualizer extends StatelessWidget {
                   runSpacing: 4,
                   children: state.candidateIds.map((id) {
                     final person = gamePeople.firstWhere((p) => p.id == id,
-                        orElse: () =>
-                            Person(id: id, name: id, emoji: '?'));
+                        orElse: () => Person(id: id, name: id, emoji: '?'));
                     return Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 3),

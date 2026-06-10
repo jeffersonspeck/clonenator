@@ -22,11 +22,13 @@ class CandidateGrid extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Icon(Icons.people_alt_rounded, size: 16, color: AppTheme.textSecondary),
+            const Icon(Icons.people_alt_rounded,
+                size: 16, color: AppTheme.textSecondary),
             const SizedBox(width: 6),
             Text(
               'Candidatos ativos: ${activeCandidateIds.length}/${allPeople.length}',
-              style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+              style:
+                  const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
             ),
           ],
         ),
@@ -36,16 +38,15 @@ class CandidateGrid extends StatelessWidget {
           runSpacing: 8,
           children: allPeople.map((person) {
             final isActive = activeCandidateIds.contains(person.id);
-            final justEliminated = justEliminatedIds?.contains(person.id) ?? false;
+            final justEliminated =
+                justEliminatedIds?.contains(person.id) ?? false;
 
             return AnimatedContainer(
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOut,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: isActive
-                    ? AppTheme.accentSoft
-                    : AppTheme.nodeEliminated,
+                color: isActive ? AppTheme.accentSoft : AppTheme.nodeEliminated,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: justEliminated
@@ -64,9 +65,12 @@ class CandidateGrid extends StatelessWidget {
                   Text(
                     person.name,
                     style: TextStyle(
-                      color: isActive ? AppTheme.textPrimary : AppTheme.textSecondary.withOpacity(0.5),
+                      color: isActive
+                          ? AppTheme.textPrimary
+                          : AppTheme.textSecondary.withValues(alpha: 0.5),
                       fontSize: 13,
-                      fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight:
+                          isActive ? FontWeight.w600 : FontWeight.normal,
                       decoration: isActive ? null : TextDecoration.lineThrough,
                       decorationColor: AppTheme.textSecondary,
                     ),

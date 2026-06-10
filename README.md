@@ -157,73 +157,57 @@ A penalidade e acumulada conforme o tipo de resposta:
 
 ---
 
-## Diagrama de decisao
+## Fluxo do Algoritmo
 
-O diagrama abaixo mostra o fluxo de uma rodada completa, desde a escolha da pergunta ate a atualizacao dos estados no beam.
+O fluxo abaixo representa o funcionamento do algoritmo de decisão inspirado no Akinator. O sistema inicia com todas as pessoas possíveis, seleciona a melhor pergunta com base na capacidade de reduzir candidatos e atualiza as hipóteses conforme a resposta do usuário.
 
-```
-+---------------------------+
-|   INICIO DA RODADA        |
-|   beamWidth estados ativos|
-+---------------------------+
-             |
-             v
-+---------------------------+
-|  Selecionar melhor estado |
-|  (menor stateScore)       |
-+---------------------------+
-             |
-             v
-+---------------------------+
-|  Escolher melhor pergunta |
-|  (menor splitScore entre  |
-|   perguntas nao feitas)   |
-+---------------------------+
-             |
-             v
-+---------------------------+
-|  Exibir pergunta          |
-|  ao usuario               |
-+---------------------------+
-             |
-      +------+------+
-      |             |
-   CERTO        INCERTO
-  (sim/nao)  (prob./nao sei)
-      |             |
-      v             v
-+----------+  +-----------+
-| 1 estado |  | 2 estados |
-| novo     |  | novos:    |
-| sem penl.|  | principal |
-|          |  | + altern. |
-+----------+  +-----------+
-      |             |
-      +------+------+
-             |
-             v
-+---------------------------+
-|  Ordenar todos os estados |
-|  por stateScore           |
-|  Manter apenas beamWidth  |
-+---------------------------+
-             |
-             v
-+---------------------------+
-|  1 candidato restante?    |
-|  ou perguntas esgotadas?  |
-+---------------------------+
-      |             |
-     SIM           NAO
-      |             |
-      v             v
-+----------+  +-----------+
-| PALPITE  |  | proxima   |
-| final    |  | rodada    |
-+----------+  +-----------+
+```mermaid
+flowchart TD
+    A[Início do jogo] --> B[Carregar pessoas e perguntas]
+    B --> C[Criar estado inicial com todas as pessoas possíveis]
+    C --> D[Selecionar melhor pergunta]
+
+    D --> E{Existe pergunta útil?}
+    E -- Não --> F[Mostrar melhores palpites]
+    E -- Sim --> G[Fazer pergunta ao usuário]
+
+    G --> H{Resposta do usuário}
+
+    H -- Sim --> I[Filtrar candidatos compatíveis com SIM]
+    H -- Não --> J[Filtrar candidatos compatíveis com NÃO]
+
+    H -- Provavelmente sim --> K[Criar duas hipóteses]
+    K --> K1[Hipótese principal: tratar como SIM]
+    K --> K2[Hipótese alternativa: tratar como NÃO com penalidade]
+
+    H -- Provavelmente não --> L[Criar duas hipóteses]
+    L --> L1[Hipótese principal: tratar como NÃO]
+    L --> L2[Hipótese alternativa: tratar como SIM com penalidade]
+
+    H -- Não sei --> M[Não eliminar candidatos]
+    M --> N[Marcar pergunta como respondida e aplicar pequena penalidade]
+
+    I --> O[Atualizar lista de estados]
+    J --> O
+    K1 --> O
+    K2 --> O
+    L1 --> O
+    L2 --> O
+    N --> O
+
+    O --> P[Ordenar hipóteses por menor número de candidatos e menor penalidade]
+    P --> Q[Manter apenas as melhores hipóteses]
+    Q --> R{Há poucos candidatos?}
+
+    R -- Sim --> S[Apresentar palpite principal]
+    R -- Não --> D
+
+    S --> T{Usuário confirmou?}
+    T -- Sim --> U[Fim]
+    T -- Não --> V[Remover ou penalizar palpite errado]
+    V --> D
 ```
 
----
 
 ## Gabarito — Perguntas x Professores
 

@@ -101,9 +101,9 @@ class _AnswerButtonState extends State<_AnswerButton>
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.12),
+            color: color.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: color.withOpacity(0.5), width: 1.5),
+            border: Border.all(color: color.withValues(alpha: 0.5), width: 1.5),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

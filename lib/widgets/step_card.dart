@@ -74,16 +74,20 @@ class _StepCardState extends State<StepCard> {
                           ),
                         ),
                         const SizedBox(height: 6),
-                        Row(
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 3),
                               decoration: BoxDecoration(
-                                color: color.withOpacity(0.15),
+                                color: color.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
-                                    color: color.withOpacity(0.4), width: 1),
+                                    color: color.withValues(alpha: 0.4),
+                                    width: 1),
                               ),
                               child: Text(
                                 '${AppTheme.answerEmoji(widget.step.answer)} ${AppTheme.answerLabel(widget.step.answer)}',
@@ -106,6 +110,8 @@ class _StepCardState extends State<StepCard> {
                             ],
                           ],
                         ),
+                        const SizedBox(height: 8),
+                        _RemovedPreview(ids: eliminated),
                       ],
                     ),
                   ),
@@ -151,6 +157,8 @@ class _StepCardState extends State<StepCard> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 12),
+                  _RemovedPanel(ids: eliminated),
                   const SizedBox(height: 12),
                   // Before/After candidates
                   Row(
@@ -267,4 +275,123 @@ class _CandidateList extends StatelessWidget {
       ],
     );
   }
+}
+
+class _RemovedPreview extends StatelessWidget {
+  final List<String> ids;
+
+  const _RemovedPreview({required this.ids});
+
+  @override
+  Widget build(BuildContext context) {
+    if (ids.isEmpty) {
+      return const Text(
+        'Professores removidos: nenhum nesta pergunta.',
+        style: TextStyle(
+          color: AppTheme.textSecondary,
+          fontSize: 11,
+          height: 1.4,
+        ),
+      );
+    }
+
+    return Text(
+      'Professores removidos: ${ids.map(_personLabel).join(', ')}',
+      style: const TextStyle(
+        color: AppTheme.textSecondary,
+        fontSize: 11,
+        height: 1.4,
+      ),
+    );
+  }
+}
+
+class _RemovedPanel extends StatelessWidget {
+  final List<String> ids;
+
+  const _RemovedPanel({required this.ids});
+
+  @override
+  Widget build(BuildContext context) {
+    final hasRemoved = ids.isNotEmpty;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: hasRemoved
+            ? AppTheme.no.withValues(alpha: 0.08)
+            : AppTheme.surfaceElevated,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: hasRemoved
+              ? AppTheme.no.withValues(alpha: 0.25)
+              : AppTheme.border,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                hasRemoved
+                    ? Icons.person_remove_alt_1_rounded
+                    : Icons.check_circle_outline_rounded,
+                size: 14,
+                color: hasRemoved ? AppTheme.no : AppTheme.textSecondary,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                hasRemoved
+                    ? 'Professores removidos da arvore'
+                    : 'Nenhum professor foi removido',
+                style: TextStyle(
+                  color: hasRemoved ? AppTheme.no : AppTheme.textSecondary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          if (hasRemoved) ...[
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: ids.map((id) {
+                final person = gamePeople.firstWhere((p) => p.id == id,
+                    orElse: () => Person(id: id, name: id, emoji: '?'));
+                return Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppTheme.surface,
+                    borderRadius: BorderRadius.circular(8),
+                    border:
+                        Border.all(color: AppTheme.no.withValues(alpha: 0.24)),
+                  ),
+                  child: Text(
+                    '${person.emoji} ${person.name}',
+                    style: const TextStyle(
+                      color: AppTheme.textPrimary,
+                      fontSize: 11,
+                      decoration: TextDecoration.lineThrough,
+                      decorationColor: AppTheme.no,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+String _personLabel(String id) {
+  final person = gamePeople.firstWhere((p) => p.id == id,
+      orElse: () => Person(id: id, name: id, emoji: '?'));
+  return '${person.emoji} ${person.name}';
 }

@@ -305,7 +305,8 @@ class _GameScreenState extends State<GameScreen> {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.accent.withOpacity(0.4), width: 1.5),
+        border: Border.all(
+            color: AppTheme.accent.withValues(alpha: 0.4), width: 1.5),
       ),
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -314,8 +315,7 @@ class _GameScreenState extends State<GameScreen> {
           Row(
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppTheme.accentSoft,
                   borderRadius: BorderRadius.circular(6),
@@ -369,7 +369,8 @@ class _GameScreenState extends State<GameScreen> {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.yes.withOpacity(0.4), width: 1.5),
+        border:
+            Border.all(color: AppTheme.yes.withValues(alpha: 0.4), width: 1.5),
       ),
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -444,6 +445,10 @@ class _GameScreenState extends State<GameScreen> {
                   ),
                 )),
           ],
+          if (_controller.history.isNotEmpty) ...[
+            const SizedBox(height: 18),
+            _buildFullTreeCard(),
+          ],
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
@@ -456,7 +461,7 @@ class _GameScreenState extends State<GameScreen> {
               },
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppTheme.yes,
-                side: BorderSide(color: AppTheme.yes.withOpacity(0.5)),
+                side: BorderSide(color: AppTheme.yes.withValues(alpha: 0.5)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
@@ -468,6 +473,203 @@ class _GameScreenState extends State<GameScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildFullTreeCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppTheme.surface.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppTheme.yes.withValues(alpha: 0.22)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(Icons.account_tree_rounded, color: AppTheme.yes, size: 16),
+              SizedBox(width: 8),
+              Text(
+                'Arvore completa',
+                style: TextStyle(
+                  color: AppTheme.textPrimary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ..._controller.history.asMap().entries.map((entry) {
+            final stepNumber = entry.key + 1;
+            final step = entry.value;
+            final removed = step.candidatesBefore
+                .where((id) => !step.candidatesAfter.contains(id))
+                .toList();
+
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: AppTheme.yes.withValues(alpha: 0.14),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: AppTheme.yes.withValues(alpha: 0.35)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '$stepNumber',
+                        style: const TextStyle(
+                          color: AppTheme.yes,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          step.questionText,
+                          style: const TextStyle(
+                            color: AppTheme.textPrimary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            height: 1.35,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: [
+                            _TreeChip(
+                              icon: Icons.reply_rounded,
+                              label: AppTheme.answerLabel(step.answer),
+                              color: AppTheme.answerColor(step.answer),
+                            ),
+                            _TreeChip(
+                              icon: Icons.person_remove_alt_1_rounded,
+                              label: removed.isEmpty
+                                  ? '0 removidos'
+                                  : '${removed.length} removido(s)',
+                              color: removed.isEmpty
+                                  ? AppTheme.textSecondary
+                                  : AppTheme.no,
+                            ),
+                            _TreeChip(
+                              icon: Icons.groups_rounded,
+                              label: '${step.candidatesAfter.length} restantes',
+                              color: AppTheme.accent,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          removed.isEmpty
+                              ? 'Removidos: nenhum'
+                              : 'Removidos: ${removed.map(_personName).join(', ')}',
+                          style: const TextStyle(
+                            color: AppTheme.textSecondary,
+                            fontSize: 11,
+                            height: 1.35,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+          const Divider(color: AppTheme.border, height: 18),
+          const Text(
+            'Hipoteses finais mantidas na arvore:',
+            style: TextStyle(
+              color: AppTheme.textSecondary,
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 8),
+          ..._controller.currentStates.asMap().entries.map((entry) {
+            final index = entry.key;
+            final state = entry.value;
+            final score = state.candidateIds.length + state.penalty;
+            final candidates = state.candidateIds.map(_personName).join(', ');
+
+            return Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: index == 0
+                    ? AppTheme.yes.withValues(alpha: 0.08)
+                    : AppTheme.surfaceElevated,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: index == 0
+                      ? AppTheme.yes.withValues(alpha: 0.24)
+                      : AppTheme.border,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    index == 0
+                        ? 'Caminho principal | score ${score.toStringAsFixed(2)}'
+                        : 'Caminho alternativo ${index + 1} | score ${score.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      color: index == 0 ? AppTheme.yes : AppTheme.textSecondary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    'Candidatos: $candidates',
+                    style: const TextStyle(
+                      color: AppTheme.textPrimary,
+                      fontSize: 11,
+                      height: 1.35,
+                    ),
+                  ),
+                  if (state.path.isNotEmpty) ...[
+                    const SizedBox(height: 5),
+                    Text(
+                      state.path.join('  >  '),
+                      style: const TextStyle(
+                        color: AppTheme.textSecondary,
+                        fontSize: 10,
+                        height: 1.35,
+                        fontFamily: 'monospace',
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  String _personName(String id) {
+    final person = _controller.personById(id);
+    if (person == null) return id;
+    return '${person.emoji} ${person.name}';
   }
 }
 
@@ -500,6 +702,45 @@ class _SectionCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           child,
+        ],
+      ),
+    );
+  }
+}
+
+class _TreeChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  const _TreeChip({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(7),
+        border: Border.all(color: color.withValues(alpha: 0.24)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 11, color: color),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ],
       ),
     );
