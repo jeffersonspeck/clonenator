@@ -48,115 +48,117 @@ class BeamVisualizer extends StatelessWidget {
                 width: isBest ? 1.5 : 1,
               ),
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  width: 4,
-                  decoration: BoxDecoration(
-                    color: isBest ? AppTheme.brass : AppTheme.border,
-                    borderRadius:
-                        const BorderRadius.horizontal(left: Radius.circular(7)),
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    width: 4,
+                    decoration: BoxDecoration(
+                      color: isBest ? AppTheme.brass : AppTheme.border,
+                      borderRadius: const BorderRadius.horizontal(
+                          left: Radius.circular(7)),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            if (isBest)
-                              const Icon(Icons.star_rounded,
-                                  size: 14, color: AppTheme.ink),
-                            if (!isBest)
-                              const Icon(Icons.fork_right_rounded,
-                                  size: 14, color: AppTheme.textSecondary),
-                            const SizedBox(width: 6),
-                            Text(
-                              isBest
-                                  ? 'Hipótese principal'
-                                  : 'Hipótese alternativa ${i + 1}',
-                              style: TextStyle(
-                                color: isBest
-                                    ? AppTheme.ink
-                                    : AppTheme.textSecondary,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Spacer(),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: isBest
-                                    ? const Color(0xFFF6EEDC)
-                                    : AppTheme.surface,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                'score: ${score.toStringAsFixed(2)}',
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              if (isBest)
+                                const Icon(Icons.star_rounded,
+                                    size: 14, color: AppTheme.ink),
+                              if (!isBest)
+                                const Icon(Icons.fork_right_rounded,
+                                    size: 14, color: AppTheme.textSecondary),
+                              const SizedBox(width: 6),
+                              Text(
+                                isBest
+                                    ? 'Hipótese principal'
+                                    : 'Hipótese alternativa ${i + 1}',
                                 style: TextStyle(
                                   color: isBest
                                       ? AppTheme.ink
                                       : AppTheme.textSecondary,
-                                  fontSize: 10,
-                                  fontFamily: 'monospace',
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
                                 ),
+                              ),
+                              const Spacer(),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: isBest
+                                      ? const Color(0xFFF6EEDC)
+                                      : AppTheme.surface,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  'score: ${score.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    color: isBest
+                                        ? AppTheme.ink
+                                        : AppTheme.textSecondary,
+                                    fontSize: 10,
+                                    fontFamily: 'monospace',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 4,
+                            children: state.candidateIds.map((id) {
+                              final person = gamePeople.firstWhere(
+                                  (p) => p.id == id,
+                                  orElse: () =>
+                                      Person(id: id, name: id, emoji: '?'));
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: isBest
+                                      ? AppTheme.ink.withValues(alpha: 0.08)
+                                      : AppTheme.accentSoft,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  '${person.emoji} ${person.name}',
+                                  style: TextStyle(
+                                    color: isBest
+                                        ? AppTheme.ink
+                                        : AppTheme.textPrimary,
+                                    fontSize: 11,
+                                    fontWeight: isBest
+                                        ? FontWeight.w700
+                                        : FontWeight.normal,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          if (state.penalty > 0) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              'Penalidade acumulada: ${state.penalty.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                color: AppTheme.no,
+                                fontSize: 10,
                               ),
                             ),
                           ],
-                        ),
-                        const SizedBox(height: 6),
-                        Wrap(
-                          spacing: 6,
-                          runSpacing: 4,
-                          children: state.candidateIds.map((id) {
-                            final person = gamePeople.firstWhere(
-                                (p) => p.id == id,
-                                orElse: () =>
-                                    Person(id: id, name: id, emoji: '?'));
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: isBest
-                                    ? AppTheme.ink.withValues(alpha: 0.08)
-                                    : AppTheme.accentSoft,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                '${person.emoji} ${person.name}',
-                                style: TextStyle(
-                                  color: isBest
-                                      ? AppTheme.ink
-                                      : AppTheme.textPrimary,
-                                  fontSize: 11,
-                                  fontWeight: isBest
-                                      ? FontWeight.w700
-                                      : FontWeight.normal,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        if (state.penalty > 0) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            'Penalidade acumulada: ${state.penalty.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              color: AppTheme.no,
-                              fontSize: 10,
-                            ),
-                          ),
                         ],
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }),

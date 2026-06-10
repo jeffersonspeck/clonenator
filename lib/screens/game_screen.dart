@@ -584,61 +584,63 @@ class _GameScreenState extends State<GameScreen> {
           width: 2,
         ),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            width: 54,
-            decoration: const BoxDecoration(
-              color: AppTheme.ink,
-              borderRadius: BorderRadius.horizontal(left: Radius.circular(8)),
-            ),
-            child: Center(
-              child: RotatedBox(
-                quarterTurns: 3,
-                child: Text(
-                  'PERGUNTA ${_controller.questionNumber}',
-                  style: const TextStyle(
-                    color: AppTheme.brass,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.2,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: 54,
+              decoration: const BoxDecoration(
+                color: AppTheme.ink,
+                borderRadius: BorderRadius.horizontal(left: Radius.circular(8)),
+              ),
+              child: Center(
+                child: RotatedBox(
+                  quarterTurns: 3,
+                  child: Text(
+                    'PERGUNTA ${_controller.questionNumber}',
+                    style: const TextStyle(
+                      color: AppTheme.brass,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    q.text,
-                    style: const TextStyle(
-                      color: AppTheme.ink,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      height: 1.25,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      q.text,
+                      style: const TextStyle(
+                        color: AppTheme.ink,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        height: 1.25,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Melhor divisao entre ${_controller.currentCandidateIds.length} candidatos restantes.',
-                    style: const TextStyle(
-                      color: Color(0xFF635C54),
-                      fontSize: 12,
-                      height: 1.4,
+                    const SizedBox(height: 8),
+                    Text(
+                      'Melhor divisao entre ${_controller.currentCandidateIds.length} candidatos restantes.',
+                      style: const TextStyle(
+                        color: Color(0xFF635C54),
+                        fontSize: 12,
+                        height: 1.4,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 18),
-                  AnswerButtons(onAnswer: _handleAnswer),
-                ],
+                    const SizedBox(height: 18),
+                    AnswerButtons(onAnswer: _handleAnswer),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -976,38 +978,40 @@ class _SectionCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            width: 5,
-            decoration: const BoxDecoration(
-              color: AppTheme.brass,
-              borderRadius: BorderRadius.horizontal(left: Radius.circular(7)),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title.toUpperCase(),
-                    style: const TextStyle(
-                      color: AppTheme.brass,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.8,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  child,
-                ],
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: 5,
+              decoration: const BoxDecoration(
+                color: AppTheme.brass,
+                borderRadius: BorderRadius.horizontal(left: Radius.circular(7)),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title.toUpperCase(),
+                      style: const TextStyle(
+                        color: AppTheme.brass,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    child,
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
