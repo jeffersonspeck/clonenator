@@ -27,15 +27,15 @@ class _StepCardState extends State<StepCard> {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: AppTheme.surface,
-        borderRadius: BorderRadius.circular(14),
+        color: AppTheme.surface.withValues(alpha: 0.96),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppTheme.border),
       ),
       child: Column(
         children: [
           InkWell(
             onTap: () => setState(() => _expanded = !_expanded),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(8),
             child: Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
@@ -47,13 +47,14 @@ class _StepCardState extends State<StepCard> {
                     height: 28,
                     decoration: BoxDecoration(
                       color: AppTheme.accentSoft,
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(7),
+                      border: Border.all(color: AppTheme.brass),
                     ),
                     child: Center(
                       child: Text(
                         '${widget.stepNumber}',
                         style: const TextStyle(
-                          color: AppTheme.accent,
+                          color: AppTheme.brass,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -138,7 +139,8 @@ class _StepCardState extends State<StepCard> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: AppTheme.surfaceElevated,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppTheme.border),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,

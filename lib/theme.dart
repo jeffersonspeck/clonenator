@@ -5,22 +5,26 @@ import 'models/models.dart';
 
 class AppTheme {
   // Palette
-  static const Color bg = Color(0xFF0F1117);
-  static const Color surface = Color(0xFF1A1D27);
-  static const Color surfaceElevated = Color(0xFF232736);
-  static const Color accent = Color(0xFF6C63FF);
-  static const Color accentSoft = Color(0xFF3D3875);
-  static const Color yes = Color(0xFF2ECC71);
-  static const Color no = Color(0xFFE74C3C);
-  static const Color probYes = Color(0xFF27AE60);
-  static const Color probNo = Color(0xFFC0392B);
-  static const Color unknown = Color(0xFF95A5A6);
-  static const Color textPrimary = Color(0xFFF0F0F8);
-  static const Color textSecondary = Color(0xFF8A8FA8);
-  static const Color border = Color(0xFF2D3148);
-  static const Color nodeActive = Color(0xFF6C63FF);
-  static const Color nodeEliminated = Color(0xFF3A3A4A);
-  static const Color nodePending = Color(0xFF2D3148);
+  static const Color bg = Color(0xFF151719);
+  static const Color surface = Color(0xFF202326);
+  static const Color surfaceElevated = Color(0xFF2A2E32);
+  static const Color accent = Color(0xFF4DB6AC);
+  static const Color accentSoft = Color(0xFF244B48);
+  static const Color yes = Color(0xFF7CCB7A);
+  static const Color no = Color(0xFFE56B5F);
+  static const Color probYes = Color(0xFFB8D66F);
+  static const Color probNo = Color(0xFFE39A55);
+  static const Color unknown = Color(0xFF9DA7AF);
+  static const Color textPrimary = Color(0xFFF4F1EA);
+  static const Color textSecondary = Color(0xFFAEB4B8);
+  static const Color border = Color(0xFF3A4045);
+  static const Color nodeActive = Color(0xFF4DB6AC);
+  static const Color nodeEliminated = Color(0xFF363331);
+  static const Color nodePending = Color(0xFF30363A);
+  static const Color paper = Color(0xFFE9DFCA);
+  static const Color ink = Color(0xFF262421);
+  static const Color brass = Color(0xFFD2A24C);
+  static const Color coral = Color(0xFFE56B5F);
 
   static ThemeData get theme => ThemeData(
         useMaterial3: true,
@@ -30,7 +34,7 @@ class AppTheme {
           surface: surface,
           primary: accent,
           onPrimary: Colors.white,
-          secondary: Color(0xFF63CFFF),
+          secondary: brass,
         ),
         textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).apply(
           bodyColor: textPrimary,
@@ -40,7 +44,7 @@ class AppTheme {
           color: surface,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(8),
             side: const BorderSide(color: border),
           ),
         ),

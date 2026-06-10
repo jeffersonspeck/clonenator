@@ -62,13 +62,18 @@ class _GameScreenState extends State<GameScreen> {
     return Scaffold(
       backgroundColor: AppTheme.bg,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            _buildHeader(),
-            Expanded(
-              child: _controller.phase == GamePhase.idle
-                  ? _buildWelcome()
-                  : _buildGameBody(),
+            const Positioned.fill(child: _AppBackdrop()),
+            Column(
+              children: [
+                _buildHeaderV2(),
+                Expanded(
+                  child: _controller.phase == GamePhase.idle
+                      ? _buildWelcomeV2()
+                      : _buildGameBodyV2(),
+                ),
+              ],
             ),
           ],
         ),
@@ -76,6 +81,7 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -156,6 +162,125 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
+  Widget _buildHeaderV2() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(18, 12, 18, 10),
+      decoration: BoxDecoration(
+        color: AppTheme.bg.withValues(alpha: 0.94),
+        border: const Border(bottom: BorderSide(color: AppTheme.border)),
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 980),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: AppTheme.paper,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppTheme.brass, width: 2),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x33000000),
+                      offset: Offset(0, 6),
+                      blurRadius: 18,
+                    ),
+                  ],
+                ),
+                child: const Icon(Icons.school_rounded,
+                    color: AppTheme.ink, size: 22),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Painel dos Professores',
+                      style: TextStyle(
+                        color: AppTheme.textPrimary,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 17,
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      'Jogo de deducao com arvore de decisoes',
+                      style: TextStyle(
+                        color: AppTheme.textSecondary,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (_controller.phase != GamePhase.idle &&
+                  MediaQuery.sizeOf(context).width > 640) ...[
+                _HeaderMetric(
+                  label: 'Pergunta',
+                  value: '${_controller.questionNumber}',
+                ),
+                const SizedBox(width: 8),
+                _HeaderMetric(
+                  label: 'Restam',
+                  value:
+                      '${_controller.currentCandidateIds.length}/${_controller.allPeople.length}',
+                ),
+                const SizedBox(width: 8),
+                _HeaderMetric(
+                  label: 'Ramos',
+                  value: '${_controller.currentStates.length}',
+                ),
+                const SizedBox(width: 10),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _controller.startGame();
+                      _lastEliminatedIds = null;
+                    });
+                  },
+                  tooltip: 'Reiniciar',
+                  style: IconButton.styleFrom(
+                    backgroundColor: AppTheme.surfaceElevated,
+                    foregroundColor: AppTheme.textPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: AppTheme.border),
+                    ),
+                  ),
+                  icon: const Icon(Icons.refresh_rounded, size: 18),
+                ),
+              ],
+              if (_controller.phase != GamePhase.idle &&
+                  MediaQuery.sizeOf(context).width <= 640)
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _controller.startGame();
+                      _lastEliminatedIds = null;
+                    });
+                  },
+                  tooltip: 'Reiniciar',
+                  style: IconButton.styleFrom(
+                    backgroundColor: AppTheme.surfaceElevated,
+                    foregroundColor: AppTheme.textPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: const BorderSide(color: AppTheme.border),
+                    ),
+                  ),
+                  icon: const Icon(Icons.refresh_rounded, size: 18),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ignore: unused_element
   Widget _buildWelcome() {
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -225,6 +350,159 @@ class _GameScreenState extends State<GameScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildWelcomeV2() {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(18),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 980),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: AppTheme.paper,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppTheme.brass, width: 2),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x44000000),
+                      offset: Offset(0, 16),
+                      blurRadius: 34,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(18, 14, 18, 12),
+                      decoration: const BoxDecoration(
+                        color: AppTheme.ink,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(8),
+                        ),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.assignment_ind_rounded,
+                              color: AppTheme.brass, size: 20),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              'Dossie de sala',
+                              style: TextStyle(
+                                color: AppTheme.textPrimary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '12 professores',
+                            style: TextStyle(
+                              color: AppTheme.brass,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Adivinhe quem esta na sua cabeca',
+                            style: TextStyle(
+                              color: AppTheme.ink,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w900,
+                              height: 1.05,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'Responda as perguntas e acompanhe o caminho da decisao como se fosse um quadro de pistas.',
+                            style: TextStyle(
+                              color: Color(0xFF5D5750),
+                              fontSize: 14,
+                              height: 1.45,
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          _RosterStrip(people: _controller.allPeople),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  _controller.startGame();
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppTheme.ink,
+                                foregroundColor: AppTheme.paper,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              icon: const Icon(Icons.play_arrow_rounded),
+                              label: const Text(
+                                'Comecar partida',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              const Row(
+                children: [
+                  Expanded(
+                    child: _WelcomeNote(
+                      icon: Icons.call_split_rounded,
+                      title: 'Ramos',
+                      text: 'Respostas incertas mantem caminhos alternativos.',
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: _WelcomeNote(
+                      icon: Icons.person_remove_rounded,
+                      title: 'Eliminados',
+                      text: 'Cada pergunta mostra quem saiu da arvore.',
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGameBodyV2() {
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 980),
+        child: _buildGameBody(),
       ),
     );
   }
@@ -299,59 +577,67 @@ class _GameScreenState extends State<GameScreen> {
     final q = _controller.currentQuestion!;
     return Container(
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1A1D40), Color(0xFF1A2540)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
+        color: AppTheme.paper,
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
-            color: AppTheme.accent.withValues(alpha: 0.4), width: 1.5),
+          color: AppTheme.brass,
+          width: 2,
+        ),
       ),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppTheme.accentSoft,
-                  borderRadius: BorderRadius.circular(6),
-                ),
+          Container(
+            width: 54,
+            decoration: const BoxDecoration(
+              color: AppTheme.ink,
+              borderRadius: BorderRadius.horizontal(left: Radius.circular(8)),
+            ),
+            child: Center(
+              child: RotatedBox(
+                quarterTurns: 3,
                 child: Text(
-                  'Pergunta ${_controller.questionNumber}',
+                  'PERGUNTA ${_controller.questionNumber}',
                   style: const TextStyle(
-                    color: AppTheme.accent,
+                    color: AppTheme.brass,
                     fontSize: 11,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.2,
                   ),
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Text(
-            q.text,
-            style: const TextStyle(
-              color: AppTheme.textPrimary,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              height: 1.4,
             ),
           ),
-          const SizedBox(height: 6),
-          Text(
-            'Esta pergunta foi escolhida por melhor dividir os ${_controller.currentCandidateIds.length} candidatos restantes.',
-            style: const TextStyle(
-              color: AppTheme.textSecondary,
-              fontSize: 12,
-              height: 1.4,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    q.text,
+                    style: const TextStyle(
+                      color: AppTheme.ink,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      height: 1.25,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Melhor divisao entre ${_controller.currentCandidateIds.length} candidatos restantes.',
+                    style: const TextStyle(
+                      color: Color(0xFF635C54),
+                      fontSize: 12,
+                      height: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  AnswerButtons(onAnswer: _handleAnswer),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 20),
-          AnswerButtons(onAnswer: _handleAnswer),
         ],
       ),
     );
@@ -363,14 +649,10 @@ class _GameScreenState extends State<GameScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1A2710), Color(0xFF1A2730)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
+        color: AppTheme.surface,
+        borderRadius: BorderRadius.circular(10),
         border:
-            Border.all(color: AppTheme.yes.withValues(alpha: 0.4), width: 1.5),
+            Border.all(color: AppTheme.yes.withValues(alpha: 0.45), width: 2),
       ),
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -683,25 +965,48 @@ class _SectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.surface,
-        borderRadius: BorderRadius.circular(14),
+        color: AppTheme.surface.withValues(alpha: 0.96),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppTheme.border),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x22000000),
+            offset: Offset(0, 8),
+            blurRadius: 22,
+          ),
+        ],
       ),
-      padding: const EdgeInsets.all(14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: AppTheme.textSecondary,
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,
+          Container(
+            width: 5,
+            decoration: const BoxDecoration(
+              color: AppTheme.brass,
+              borderRadius: BorderRadius.horizontal(left: Radius.circular(7)),
             ),
           ),
-          const SizedBox(height: 10),
-          child,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title.toUpperCase(),
+                    style: const TextStyle(
+                      color: AppTheme.brass,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  child,
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -745,6 +1050,187 @@ class _TreeChip extends StatelessWidget {
       ),
     );
   }
+}
+
+class _HeaderMetric extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _HeaderMetric({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceElevated,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppTheme.border),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label.toUpperCase(),
+            style: const TextStyle(
+              color: AppTheme.textSecondary,
+              fontSize: 8,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.6,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: const TextStyle(
+              color: AppTheme.textPrimary,
+              fontSize: 13,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RosterStrip extends StatelessWidget {
+  final List<Person> people;
+
+  const _RosterStrip({required this.people});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: people.map((person) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF6EEDC),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFD0C3A7)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(person.emoji, style: const TextStyle(fontSize: 16)),
+              const SizedBox(width: 6),
+              Text(
+                person.name,
+                style: const TextStyle(
+                  color: AppTheme.ink,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class _WelcomeNote extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String text;
+
+  const _WelcomeNote({
+    required this.icon,
+    required this.title,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppTheme.surface.withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppTheme.border),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: AppTheme.brass, size: 20),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppTheme.textPrimary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  text,
+                  style: const TextStyle(
+                    color: AppTheme.textSecondary,
+                    fontSize: 11,
+                    height: 1.35,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AppBackdrop extends StatelessWidget {
+  const _AppBackdrop();
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(painter: _BackdropPainter());
+  }
+}
+
+class _BackdropPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final base = Paint()..color = AppTheme.bg;
+    canvas.drawRect(Offset.zero & size, base);
+
+    final grid = Paint()
+      ..color = AppTheme.border.withValues(alpha: 0.22)
+      ..strokeWidth = 1;
+    const step = 38.0;
+    for (double x = 0; x < size.width; x += step) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), grid);
+    }
+    for (double y = 0; y < size.height; y += step) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
+    }
+
+    final tape = Paint()
+      ..color = AppTheme.brass.withValues(alpha: 0.08)
+      ..strokeWidth = 28;
+    canvas.drawLine(
+      Offset(-80, size.height * 0.18),
+      Offset(size.width + 80, size.height * 0.02),
+      tape,
+    );
+    canvas.drawLine(
+      Offset(-80, size.height * 0.86),
+      Offset(size.width + 80, size.height * 0.72),
+      tape,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _InfoRow extends StatelessWidget {

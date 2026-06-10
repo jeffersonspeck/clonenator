@@ -1,11 +1,11 @@
-# Beam Search Decision Tree — Visualizador Interativo
+# Beam Search Decision Tree
 
 **Autor:** Jefferson Rodrigo Speck  
 **Disciplina:** Desenvolvimento Mobile
 
 ---
 
-## Contexto pedagogico — o que e este projeto
+## Contexto pedagogico
 
 Este projeto foi criado com dois propositos complementares.
 
@@ -90,6 +90,63 @@ Cada grupo devera cadastrar ao menos 15 perguntas no aplicativo.
 6. A turma verifica se o sistema acertou ou errou.
 7. O grupo avaliador comenta a experiencia de uso.
 8. O professor avalia a solucao tecnica e a apresentacao.
+
+### Conhecimentos prévios esperados
+
+Para realizar a atividade, é recomendado que os estudantes já tenham noções básicas de:
+
+1. lógica de programação;
+2. estruturas condicionais;
+3. listas, mapas e conjuntos;
+4. programação orientada a objetos;
+5. desenvolvimento mobile com Flutter;
+6. criação de telas e navegação;
+7. manipulação de estado;
+8. versionamento com Git.
+
+### Competências trabalhadas
+
+1. Raciocínio lógico e algorítmico;
+2. Modelagem de estruturas de dados;
+3. Desenvolvimento mobile;
+4. Programação orientada a objetos;
+5. Pensamento computacional;
+6. Resolução de problemas;
+7. Design de jogos digitais;
+8. Trabalho em equipe;
+9. Comunicação técnica;
+10. Testes e validação de software.
+
+### Materiais necessários
+
+1. Computador com ambiente Flutter configurado;
+2. Android Studio, Visual Studio Code ou IDE equivalente;
+3. Emulador Android ou dispositivo físico;
+4. Git e GitHub;
+5. Editor de Markdown para documentação;
+6. Repositório público do projeto;
+7. Quadro, projetor ou TV para explicação;
+8. Dataset inicial com pessoas, perguntas e respostas esperadas;
+9. Material de apoio sobre:
+    - árvores de decisão;
+    - entropia;
+    - ganho de informação;
+    - estrutura de jogos de perguntas;
+    - organização de projetos mobile.
+
+### Expectativas de aprendizagem
+
+Espera-se que os estudantes compreendam que jogos aparentemente simples podem envolver algoritmos sofisticados. A atividade deve permitir que eles percebam a relação entre desenvolvimento mobile, modelagem de dados, inteligência computacional e experiência do usuário.
+
+Também se espera que os estudantes compreendam que algoritmos de decisão não dependem apenas de muitos comandos condicionais. Eles podem ser estruturados a partir de dados, métricas, hipóteses e estratégias de seleção.
+
+Ao final, os estudantes deverão ser capazes de explicar como o sistema escolhe perguntas, como reduz candidatos, como lida com incertezas e por que sua implementação se aproxima de conceitos usados em árvores de decisão.
+
+### Resultado esperado
+
+Ao concluir a atividade, cada grupo deverá possuir um jogo mobile funcional, capaz de realizar perguntas, interpretar respostas, manter hipóteses e sugerir uma pessoa como palpite final.
+
+Mais do que acertar sempre, o objetivo é que o sistema demonstre uma lógica coerente de decisão, seja testável e permita evolução futura.
 
 ---
 

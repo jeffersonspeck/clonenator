@@ -44,15 +44,15 @@ class CandidateGrid extends StatelessWidget {
             return AnimatedContainer(
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOut,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
-                color: isActive ? AppTheme.accentSoft : AppTheme.nodeEliminated,
-                borderRadius: BorderRadius.circular(20),
+                color: isActive ? AppTheme.paper : AppTheme.nodeEliminated,
+                borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                   color: justEliminated
                       ? AppTheme.no
                       : isActive
-                          ? AppTheme.accent
+                          ? AppTheme.brass
                           : AppTheme.border,
                   width: justEliminated ? 2 : 1,
                 ),
@@ -66,11 +66,11 @@ class CandidateGrid extends StatelessWidget {
                     person.name,
                     style: TextStyle(
                       color: isActive
-                          ? AppTheme.textPrimary
+                          ? AppTheme.ink
                           : AppTheme.textSecondary.withValues(alpha: 0.5),
                       fontSize: 13,
                       fontWeight:
-                          isActive ? FontWeight.w600 : FontWeight.normal,
+                          isActive ? FontWeight.w800 : FontWeight.normal,
                       decoration: isActive ? null : TextDecoration.lineThrough,
                       decorationColor: AppTheme.textSecondary,
                     ),

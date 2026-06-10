@@ -99,11 +99,18 @@ class _AnswerButtonState extends State<_AnswerButton>
         scale: _pressed ? 0.95 : 1.0,
         duration: const Duration(milliseconds: 100),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 12),
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: color.withValues(alpha: 0.5), width: 1.5),
+            color: AppTheme.paper,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: color, width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: 0.12),
+                offset: const Offset(0, 4),
+                blurRadius: 0,
+              ),
+            ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
